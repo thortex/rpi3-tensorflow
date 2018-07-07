@@ -18,22 +18,6 @@ cd release
 | TensorFlow    | 1.8.0        |
 | gcc           | 4.8.3        |
 
-## Supported Languages
-
-- Italian, Tamil, Swahili, Persian, Malay, Hindi, Japanese, German, Portoguese, Russian, Simplified Chinese, Arabic, Spanish, and English.
-- Tamil, Japanese Japanese_vert, and Arabic for script.
-
-## How to Install
-
-```
-git clone https://github.com/thortex/rpi3-tesseract.git
-cd rpi3-tesseract
-cd release
-./install_requires_related2leptonica.sh
-./install_requires_related2tesseract.sh
-./install_tesseract.sh
-```
-
 ## Supported Hardwares
 
 | Board                 | Support |
