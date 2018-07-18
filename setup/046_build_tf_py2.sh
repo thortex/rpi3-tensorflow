@@ -1,6 +1,6 @@
 #!/bin/bash -x
 # You have to execute this script after 045_build_tf_py3.sh.
-V=1.8.0
+V=1.9.0
 PYTHON_VER=2.7
 cd tensorflow-$V
 # configure
@@ -20,7 +20,9 @@ cd tensorflow-$V
  TF_NEED_GDR=0 \
  TF_NEED_VERBS=0 \
  TF_NEED_MPI=0 \
+ TF_NEED_AWS=0 \
  TF_SET_ANDROID_WORKSPACE=0 \
+ CC_OPT_FLAGS=-march=native \
  ./configure)
 
 # build.
@@ -32,24 +34,32 @@ bazel build -c opt \
       --copt=-U__GCC_HAVE_SYNC_COMPARE_AND_SWAP_1 \
       --copt=-U__GCC_HAVE_SYNC_COMPARE_AND_SWAP_2 \
       --copt=-U__GCC_HAVE_SYNC_COMPARE_AND_SWAP_8 \
+      --copt=-std=gnu11 \
       --copt=-march=armv7-a \
       --copt=-mfpu=neon-vfpv4 \
       --copt=-mfloat-abi=hard \
-      --copt=-std=gnu11 \
       --copt=-funsafe-math-optimizations \
       --copt=-ftree-vectorize \
       --copt=-fomit-frame-pointer \
       --verbose_failures \
-      --local_resources 1536,0.8,1.0 \
+      --jobs 3 \
+      --progress_report_interval 30 \
+      --local_resources 1536,3.0,1.0 \
       --cxxopt="-D_GLIBCXX_USE_CXX11_ABI=0" \
       //tensorflow/tools/pip_package:build_pip_package
 
 # build pip pakage.
 D=/tmp/tensorflow_pkg/
-bazel-bin/tensorflow/tools/pip_package/build_pip_package $D
-R=release
+B=bazel-bin/tensorflow/tools/pip_package/build_pip_package
+if [ -e "$B" ] ; then
+    $B $D
+fi
+R=release/
 # move file to release
 cd ..
 F=tensorflow-${V}-cp27-cp27mu-linux_armv7l.whl
-mv $D$F $R
-sudo pip2 install $R/$F
+if [ -e "$D$F" ] ; then
+    mv $D$F ../$R
+fi
+
+#sudo pip2 install ../$R/$F

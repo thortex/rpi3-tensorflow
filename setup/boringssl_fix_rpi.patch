@@ -1,0 +1,63 @@
+diff -r -u /home/pi/.cache/bazel/_bazel_pi/c3ca40bc904464cf5d8e3f2773836a71/external/boringssl/BUILD ./BUILD
+--- /home/pi/.cache/bazel/_bazel_pi/c3ca40bc904464cf5d8e3f2773836a71/external/boringssl/BUILD	2017-10-18 06:30:48.000000000 +0900
++++ ./BUILD	2018-07-11 20:38:47.683298362 +0900
+@@ -22,6 +22,7 @@
+     "crypto_internal_headers",
+     "crypto_sources",
+     "crypto_sources_linux_x86_64",
++    "crypto_sources_linux_arm",
+     "crypto_sources_mac_x86_64",
+     "fips_fragments",
+     "ssl_headers",
+@@ -37,6 +38,11 @@
+ )
+ 
+ config_setting(
++    name = "linux_arm",
++    values = {"cpu": "arm"},
++)
++
++config_setting(
+     name = "mac_x86_64",
+     values = {"cpu": "darwin"},
+ )
+@@ -56,7 +62,6 @@
+ 
+     # This list of warnings should match those in the top-level CMakeLists.txt.
+     "-Wall",
+-    "-Werror",
+     "-Wformat=2",
+     "-Wsign-compare",
+     "-Wmissing-field-initializers",
+@@ -72,6 +77,7 @@
+ 
+ boringssl_copts = select({
+     ":linux_x86_64": posix_copts,
++    ":linux_arm": posix_copts,
+     ":mac_x86_64": posix_copts,
+     ":windows_x86_64": [
+         "-DWIN32_LEAN_AND_MEAN",
+@@ -82,6 +88,7 @@
+ 
+ crypto_sources_asm = select({
+     ":linux_x86_64": crypto_sources_linux_x86_64,
++    ":linux_arm": crypto_sources_linux_arm,
+     ":mac_x86_64": crypto_sources_mac_x86_64,
+     "//conditions:default": [],
+ })
+@@ -96,6 +103,7 @@
+ 
+ boringssl_copts_c11 = boringssl_copts + select({
+     ":linux_x86_64": posix_copts_c11,
++    ":linux_arm": posix_copts_c11,
+     ":mac_x86_64": posix_copts_c11,
+     "//conditions:default": [],
+ })
+@@ -108,6 +116,7 @@
+ 
+ boringssl_copts_cxx = boringssl_copts + select({
+     ":linux_x86_64": posix_copts_cxx,
++    ":linux_arm": posix_copts_cxx,
+     ":mac_x86_64": posix_copts_cxx,
+     "//conditions:default": [],
+ })

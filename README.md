@@ -15,26 +15,26 @@ cd release
 | Name          | Version      |
 |:--------------|:-------------|
 | Bazel         | 0.10.0       |
-| TensorFlow    | 1.8.0        |
-| gcc           | 4.8.3        |
+| TensorFlow    | 1.9.0        |
+| gcc           | 4.8.5        |
 
 ## Supported Hardwares
 
-| Board                 | Support |
-|:----------------------|:--------|
-| 3 Model B+            | May Yes |
-| 3 Model B             | Yes     |
-| 2 Model B v1.2        | May Yes |
-| 2 Model B             | No      |
-| 1 Model B+            | No      |
-| 1 Model B             | No      |
-| Model A               | No      |
-| Model A+              | No      |
-| Zero                  | No      |
-| Zero W                | No      |
-| Computer Module 1     | No      |
-| Computer Module 3     | May Yes |
-| Computer Module 3 Lite| May Yes |
+| Board                 | Support | CPU Core   |
+|:----------------------|:--------|:-----------|
+| 3 Model B+            | May Yes | armv8      |
+| 3 Model B             | Yes     | armv8      |
+| 2 Model B v1.2        | May Yes | armv8      |
+| 2 Model B             | May Yes | armv7      |
+| 1 Model B+            | No      | armv6      |
+| 1 Model B             | No      | armv6      |
+| Model A               | No      | armv6      |
+| Model A+              | No      | armv6      |
+| Zero                  | No      | armv6      |
+| Zero W                | No      | armv6      |
+| Computer Module 1     | No      | armv6      |
+| Computer Module 3     | May Yes | armv8      |
+| Computer Module 3 Lite| May Yes | armv8      |
 
 ## How to Build
 
@@ -43,15 +43,23 @@ Change the directory to build.
 cd setup
 ```
 
-You should build Bazel and TensorFlow with gcc 4.8.
-So, change your default gcc to 4.8, instead of 6 or later.
+You should build Bazel and TensorFlow with gcc 4.8 or later.
 ```
 ./039_gcc-4.8.sh
 ```
+or
+```
+./044_gcc-6.sh
+```
 
-Build bazel. If you have already bazel 0.10.0, this instruction is not required to build Tensorflow.
+Build bazel. If you have already bazel 0.10.0 in your PATH (e.g. /usr/local/bin), this instruction is not required to build TensorFlow.
 ```
 ./040_build_bazel.sh
+```
+or, use prebuilt bazel binary:
+```
+wget -c https://github.com/thortex/rpi3-echo/releases/download/v0.0.1/bazel-0.10.0.bin
+sudo mv bazel-0.10.0.bin /usr/local/bin
 ```
 
 Build TensorFlow for Python3.
@@ -66,17 +74,8 @@ Build TensorFlow for Python2, if needed.
 
 Update the install script which install packages related to TensorFlow.
 ```
-./047_update_deps.sh
+cd ..
+./setup/047_update_deps.sh
 ```
 
-### CXXFLAGS
-
-Options of CXXFLAGS for gcc 4.8 is listed below:
-
-| Option | Value                |
-|:-------|:---------------------|
-|-mtune  | cortex-a53           |
-|-march  | armv8-a+crc          |
-|-mcpu   | cortex-a53           |
-|-mfpu   | crypto-neon-fp-armv8 |
 
