@@ -74,7 +74,7 @@ bazel build -c opt \
       --copt=-U__GCC_HAVE_SYNC_COMPARE_AND_SWAP_1 \
       --copt=-U__GCC_HAVE_SYNC_COMPARE_AND_SWAP_2 \
       --copt=-U__GCC_HAVE_SYNC_COMPARE_AND_SWAP_8 \
-      --copt=-std=gnu11 \
+      --conlyopt=-std=gnu11 \
       --copt=-march=armv7-a \
       --copt=-mfpu=neon-vfpv4 \
       --copt=-mfloat-abi=hard \
@@ -82,14 +82,10 @@ bazel build -c opt \
       --copt=-ftree-vectorize \
       --copt=-fomit-frame-pointer \
       --verbose_failures \
-      --jobs 3 \
-      --progress_report_interval 30 \
+      --jobs 0 \
       --local_resources 1536,3.0,1.0 \
       --cxxopt="-D_GLIBCXX_USE_CXX11_ABI=0" \
       //tensorflow/tools/pip_package:build_pip_package
-#      //tensorflow:libtensorflow.so \
-#      //tensorflow:libtensorflow_framework.so \
-#      //tensorflow/tools/benchmark:benchmark_model \
 
 # build pip pakage.
 D=/tmp/tensorflow_pkg/
